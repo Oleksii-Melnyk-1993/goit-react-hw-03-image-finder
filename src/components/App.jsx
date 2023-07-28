@@ -1,6 +1,7 @@
 import { Component } from 'react';
+import { fetchImages } from 'services/PixabayAPI';
 
-export default class App extends Component {
+export class App extends Component {
   state = {
     nameSearch: '',
   };
