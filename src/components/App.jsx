@@ -3,7 +3,14 @@ import { fetchImages } from 'services/PixabayAPI';
 
 export class App extends Component {
   state = {
-    nameSearch: '',
+    query: '',
+    images: [],
+    page: 1,
+    modalImageURL: '',
+    isLoading: false,
+    showModal: false,
+    endCollection: false,
+    tags: '',
   };
 
   handleSubmit = nameSearch => {
