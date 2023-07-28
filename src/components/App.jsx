@@ -1,5 +1,6 @@
 import { Component } from 'react';
-import { fetchImages } from 'services/PixabayAPI';
+// import { fetchImages } from 'services/PixabayAPI';
+import { Searchbar } from './Searchbar/Searchbar';
 
 export class App extends Component {
   state = {
@@ -13,11 +14,16 @@ export class App extends Component {
     tags: '',
   };
 
-  handleSubmit = nameSearch => {
-    this.setState({ nameSearch });
+  handleSubmitForm = query => {
+    this.setState({ query, page: 1, images: [], endCollection: false });
+  };
+  handleLoadMore = () => {
+    this.setState(prevState => ({ page: prevState.page + 1 }));
   };
 
   render() {
+    // const { images, isLoading, endCollection, showModal, modalImageURL } =
+    //   this.state;
     return (
       <div
         style={{
@@ -29,7 +35,7 @@ export class App extends Component {
           color: '#010101',
         }}
       >
-        React homework template
+        <Searchbar onSubmit={this.handleSubmitForm} />
       </div>
     );
   }
