@@ -4,6 +4,8 @@ import { Searchbar } from './Searchbar/Searchbar';
 import toast, { Toaster } from 'react-hot-toast';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { fetchImages } from 'services/PixabayAPI';
+import { Button } from './Button/Button';
+import { Loader } from './Loader/Loader';
 
 export class App extends Component {
   state = {
@@ -61,6 +63,7 @@ export class App extends Component {
   render() {
     const { images, isLoading, endCollection, showModal, modalImageURL } =
       this.state;
+    const showLoadMoreBtn = images.length > 0 && !endCollection;
     return (
       <div
         style={{
@@ -81,6 +84,8 @@ export class App extends Component {
 
         <Searchbar onSubmit={this.handleSubmitForm} />
         <ImageGallery images={images} onClick={this.openModal} />
+        {showLoadMoreBtn && <Button onClick={() => this.handleLoadMore} />}
+        {isLoading && <Loader></Loader>}
       </div>
     );
   }
