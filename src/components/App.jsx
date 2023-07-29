@@ -1,5 +1,4 @@
 import { Component } from 'react';
-import { fetchImages } from 'services/PixabayAPI';
 import { Searchbar } from './Searchbar/Searchbar';
 import toast, { Toaster } from 'react-hot-toast';
 import { ImageGallery } from './ImageGallery/ImageGallery';
@@ -33,7 +32,7 @@ export class App extends Component {
   handleLoadMore = () => {
     this.setState(prevState => ({ page: prevState.page + 1 }));
   };
-  async componentDidUpdate(prevState, prevProps) {
+  async componentDidUpdate(prevState) {
     const { query, page } = this.state;
     if (prevState.query !== query || prevState.page !== page) {
       try {
