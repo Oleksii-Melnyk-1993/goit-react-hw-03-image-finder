@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-export const ImageGalleryItem = ({ image }) => {
+export const ImageGalleryItem = ({ image, onClick }) => {
   return (
     <li>
       <img
