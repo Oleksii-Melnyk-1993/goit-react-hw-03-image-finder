@@ -49,7 +49,7 @@ export class App extends Component {
         }));
 
         if (!data.totalHits) {
-          return toast.success(
+          return toast.error(
             'Sorry, there are no images matching your search query.'
           );
         }
