@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_KEY = '38520819-debf8b7190981ec5853d7e61f';
+const API_KEY = '37030220-55e5b35e4370d44ae057df5d9';
 
 const pageLimit = 12;
 

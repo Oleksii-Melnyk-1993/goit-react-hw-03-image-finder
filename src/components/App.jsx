@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { Searchbar } from './Searchbar/Searchbar';
 import toast, { Toaster } from 'react-hot-toast';
+import { ThreeCircles } from 'react-loader-spinner';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { fetchImages } from 'services/PixabayAPI';
 import { Button } from './Button/Button';
@@ -33,27 +34,33 @@ export class App extends Component {
   handleLoadMore = () => {
     this.setState(prevState => ({ page: prevState.page + 1 }));
   };
-  async componentDidUpdate(prevState) {
+
+  async componentDidUpdate(prevState, prevProps) {
     const { query, page } = this.state;
     if (prevState.query !== query || prevState.page !== page) {
       try {
         this.setState({ isLoading: true });
+
         const data = await fetchImages(query, page);
+
         this.setState(prevState => ({
           images: [...prevState.images, ...data.hits],
         }));
+        console.log(data);
         if (!data.totalHits) {
-          return toast.error(
+          return toast.success(
             'Sorry, there are no images matching your search query.'
           );
         }
+
         const totalPages = Math.ceil(data.totalHits / 12);
+
         if (page === totalPages) {
           this.setState({ endCollection: true });
           toast.success('The end🙄');
         }
       } catch (error) {
-        console.log('Error', error.message);
+        console.error('Error', error.message);
       } finally {
         this.setState({ isLoading: false });
       }
@@ -83,9 +90,24 @@ export class App extends Component {
         )}
 
         <Searchbar onSubmit={this.handleSubmitForm} />
-        <ImageGallery images={images} onClick={this.openModal} />
-        {showLoadMoreBtn && <Button onClick={() => this.handleLoadMore} />}
-        {isLoading && <Loader></Loader>}
+        <ImageGallery images={this.state.images} onClick={this.openModal} />
+        {showLoadMoreBtn && <Button onClick={() => this.handleLoadMore()} />}
+        {isLoading && (
+          <Loader>
+            <ThreeCircles
+              height="100"
+              width="100"
+              color="#063970"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
+              ariaLabel="three-circles-rotating"
+              outerCircleColor=""
+              innerCircleColor=""
+              middleCircleColor=""
+            />
+          </Loader>
+        )}
       </div>
     );
   }
