@@ -35,7 +35,7 @@ export class App extends Component {
     this.setState(prevState => ({ page: prevState.page + 1 }));
   };
 
-  async componentDidUpdate(prevState, prevProps) {
+  async componentDidUpdate(prevProps, prevState) {
     const { query, page } = this.state;
     if (prevState.query !== query || prevState.page !== page) {
       try {
@@ -46,7 +46,7 @@ export class App extends Component {
         this.setState(prevState => ({
           images: [...prevState.images, ...data.hits],
         }));
-        console.log(data);
+
         if (!data.totalHits) {
           return toast.success(
             'Sorry, there are no images matching your search query.'
@@ -60,7 +60,7 @@ export class App extends Component {
           toast.success('The end🙄');
         }
       } catch (error) {
-        console.error('Error', error.message);
+        console.log('Error', error.message);
       } finally {
         this.setState({ isLoading: false });
       }
