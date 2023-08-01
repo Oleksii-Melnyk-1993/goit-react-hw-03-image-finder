@@ -16,6 +16,7 @@ export class App extends Component {
     page: 1,
     modalImageURL: '',
     isLoading: false,
+    isLoadingMore: false,
     showModal: false,
     endCollection: false,
     tags: '',
@@ -32,12 +33,15 @@ export class App extends Component {
     // console.log(query);
     this.setState({ query, page: 1, images: [], endCollection: false });
   };
-  handleLoadMore = () => {
-    this.setState(prevState => ({ page: prevState.page + 1 }));
+  handleLoadMore = async () => {
+    await this.setState(prevState => ({
+      page: prevState.page + 1,
+      isLoadingMore: true,
+    }));
   };
 
   async componentDidUpdate(prevProps, prevState) {
-    const { query, page } = this.state;
+    const { query, page, isLoadingMore } = this.state;
     if (prevState.query !== query || prevState.page !== page) {
       try {
         this.setState({ isLoading: true });
@@ -57,7 +61,7 @@ export class App extends Component {
         const totalPages = Math.ceil(data.totalHits / 12);
 
         if (page === totalPages) {
-          this.setState({ endCollection: true });
+          this.setState({ endCollection: true, isLoadingMore: false });
           toast.success('The end🙄');
         }
       } catch (error) {
@@ -69,9 +73,17 @@ export class App extends Component {
   }
 
   render() {
-    const { images, isLoading, endCollection, showModal, modalImageURL } =
-      this.state;
-    const showLoadMoreBtn = images.length > 0 && !endCollection;
+    const {
+      images,
+      isLoading,
+      isLoadingMore,
+      endCollection,
+      showModal,
+      modalImageURL,
+    } = this.state;
+    const showLoadMoreBtn =
+      images.length > 0 && !endCollection && !isLoadingMore;
+    const hideGallery = images.length > 0;
     return (
       <div className={css.app}>
         <Toaster position="top-right" reverseOrder={false} />
@@ -82,9 +94,11 @@ export class App extends Component {
         )}
 
         <Searchbar onSubmit={this.handleSubmitForm} />
-        <ImageGallery images={this.state.images} onClick={this.openModal} />
+        {hideGallery && (
+          <ImageGallery images={this.state.images} onClick={this.openModal} />
+        )}
         {showLoadMoreBtn && <Button onClick={() => this.handleLoadMore()} />}
-        {isLoading && (
+        {isLoading && isLoadingMore && (
           <Loader>
             <ThreeCircles
               height="100"
