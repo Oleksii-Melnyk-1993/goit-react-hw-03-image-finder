@@ -41,7 +41,7 @@ export class App extends Component {
   };
 
   async componentDidUpdate(prevProps, prevState) {
-    const { query, page, isLoadingMore } = this.state;
+    const { query, page } = this.state;
     if (prevState.query !== query || prevState.page !== page) {
       try {
         this.setState({ isLoading: true });
